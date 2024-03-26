@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 
-// Register Api
+// user register
 router.post('/register', async (req, res) => {
     const { userName, firstName, lastName, password, enrollmentNumber } = req.body;
 
@@ -46,7 +46,7 @@ router.post('/register', async (req, res) => {
 
 
 
-// Login Api
+// user login
 
 
 router.post('/login', async (req, res) => {
@@ -80,6 +80,13 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+
+
+
+
+
+
 
 
 
