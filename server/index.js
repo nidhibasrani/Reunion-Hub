@@ -1,14 +1,17 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const connectDb = require('./config/db')
+connectDb();
+const userRoutes = require('./routes/user');
+const adminRoutes = require('./routes/admin');
 app.use(express.json());
-const port = process.env.PORT || 5000;
+const port = process.env.PORT;
+app.use(cors());
 
 
-
-app.get('/test', (req, res)=>{
-    res.send('Hello from the server')
-})
+app.use('/api/user', userRoutes);
+app.use('/api/admin', adminRoutes);
 
 
 app.listen(port, () => {
