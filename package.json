@@ -24,6 +24,8 @@
     "admin"
   ],
   "dependencies": {
-    "dotenv-cli": "^7.4.1"
+    "dotenv-cli": "^7.4.1",
+    "react-slick": "^0.30.2",
+    "slick-carousel": "^1.8.1"
   }
 }
