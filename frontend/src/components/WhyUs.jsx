@@ -35,7 +35,7 @@ const WhyUs = () => {
         <div>
             <img className='' src={image.slider1} width={100} />
         </div>
-        <div>
+        <div className='flex flex-col items-center py-2'>
             <h1>Pointer</h1>
             <p className='text-xs'>Description</p>
         </div>
