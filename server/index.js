@@ -21,6 +21,10 @@ if (!fs.existsSync(uploadFolder)) {
     fs.mkdirSync(uploadFolder);
 }
 
+app.use('/uploads', express.static('uploads'));
+app.use('/uploads/website-gallery', express.static('uploads/website-gallery'));
+
+
 // Routes
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);

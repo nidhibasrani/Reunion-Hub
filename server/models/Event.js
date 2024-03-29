@@ -11,7 +11,7 @@ const eventSchema = new mongoose.Schema({
     },
     featuredImage: {
         type: String,
-        required: true
+        // required: true
     },
     gallery : [{
         type : String,
@@ -19,7 +19,7 @@ const eventSchema = new mongoose.Schema({
     }],
     date: {
         type: Date,
-        required: true
+        default : Date.now()
     },
 
 });

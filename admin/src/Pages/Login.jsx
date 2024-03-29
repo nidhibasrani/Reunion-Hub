@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUser } from '../features/AuthSlice';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
-
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -13,6 +15,12 @@ const Login = () => {
     password: '',
   });
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
+
   const handleChange = (e) => {
     setCredentials({
       ...credentials,
@@ -20,27 +28,33 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    dispatch(loginUser(credentials));
+    try {
+      const resultAction = await dispatch(loginUser(credentials));
+      const { payload, error } = resultAction;
 
-
-    if (isAuthenticated) {
-      navigate('/dashboard');
-    } else {
-      alert('Invalid credentials');
+      if (error) {
+        
+        toast.error(payload.msg || 'Invalid credentials');
+      } else {
+     
+        toast.success('Login successful!');
+      
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error('An error occurred during login');
     }
-
-
-  
   };
-
 
 
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100">
+      <ToastContainer />
       <div className="bg-white p-8 rounded shadow-md w-full sm:w-96">
         <h2 className="text-2xl font-semibold mb-4 ">Admin Login</h2>
         <form className="space-y-4" onSubmit={handleSubmit}>

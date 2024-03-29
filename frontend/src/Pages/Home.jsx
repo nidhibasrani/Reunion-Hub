@@ -26,7 +26,7 @@ const Home = () => {
   return (
     <>
       <div className="home ">
-        <h1 className="text-3xl text-red-500">Home</h1>
+        {/* <h1 className="text-3xl text-red-500">Home</h1> */}
         <Slider {...sliderSettings}>
           {images.map((img) => (
             <div className="w-screen h-screen" key={img.id}>

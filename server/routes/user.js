@@ -32,7 +32,7 @@ router.post('/register', upload.single('profileImage'), async (req, res) => {
             lastName,
             password: hashedPassword,
             enrollmentNumber,
-            profileImage: req.file ? req.file.path : null // Assuming 'path' is where Multer saves the file
+            profileImage: req.file ? req.file.path : null 
         });
 
        

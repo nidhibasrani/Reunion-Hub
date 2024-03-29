@@ -5,13 +5,17 @@ import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import { store } from './store/store.js'
 import { Provider } from 'react-redux'
+import { ChakraProvider } from '@chakra-ui/react'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-      
-        <App />
-    
+      <ChakraProvider>
+        <BrowserRouter>
+          <App />
+
+        </BrowserRouter>
+      </ChakraProvider>
     </Provider>
-  </React.StrictMode>,
+  </React.StrictMode >,
 )
