@@ -2,6 +2,7 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const Admin = require('../models/Admin')
+const User = require('../models/User');
 
 
 
@@ -57,6 +58,32 @@ router.post('/login', async (req, res) => {
                 role : user.role
             }
         });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+
+// Get All Users 
+
+router.get('/users', async (req, res) => {
+    try {
+        const users = await User.find().select('userName');
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+
+// Delete a User
+
+router.delete('/delete-user/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+        res.json(user);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

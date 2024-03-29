@@ -2,42 +2,46 @@ const router = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const upload = require('../middleware/upload');
 
 
 // user register
-router.post('/register', async (req, res) => {
+router.post('/register', upload.single('profileImage'), async (req, res) => {
     const { userName, firstName, lastName, password, enrollmentNumber } = req.body;
 
-
+   
     if (!userName || !firstName || !lastName || !password || !enrollmentNumber) {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
     try {
-
+       
         const existingUser = await User.findOne({ userName });
         if (existingUser) {
             return res.status(400).json({ message: 'Username already taken' });
         }
+
+     
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Create a new user object
+       
         const newUser = new User({
             userName,
             firstName,
             lastName,
-            password : hashedPassword,
-            enrollmentNumber
+            password: hashedPassword,
+            enrollmentNumber,
+            profileImage: req.file ? req.file.path : null // Assuming 'path' is where Multer saves the file
         });
 
-
+       
         await newUser.save();
 
-        // Respond with success message
+    
         res.status(201).json({ message: 'User registered successfully', user: newUser });
     } catch (error) {
-
+      
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
