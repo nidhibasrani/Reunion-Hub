@@ -21,6 +21,10 @@ const eventSchema = new mongoose.Schema({
         type: Date,
         default : Date.now()
     },
+    participants : [{
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'User'
+    }]
 
 });
 

@@ -3,6 +3,8 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const upload = require('../middleware/upload');
+const auth = require('../middleware/auth')
+const Event = require('../models/Event');
 
 
 // user register
@@ -72,11 +74,11 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid username or password' });
         }
 
-        const accessToken = jwt.sign({ userId: user._id , role : user.role}, process.env.JWT_KEY);
+        const token = jwt.sign({ userId: user._id , role : user.role}, process.env.JWT_KEY);
         const { password: userPassword, ...others } = user._doc; 
     
-        res.cookie("token", accessToken, { httpOnly: true });
-        res.status(200).json({ ...others, accessToken });
+        res.cookie("token", token, { httpOnly: true });
+        res.status(200).json({ ...others, token });
 
         
     } catch (error) {
@@ -86,6 +88,97 @@ router.post('/login', async (req, res) => {
 });
 
 
+
+// Get me
+
+router.get('/me', auth, async (req, res)=>{
+    try {
+        
+        const {userId} = req.user;
+
+        const user = await User.findById(userId);
+        res.status(200).json(user);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    
+        
+    }
+})
+
+
+// Participate In Event
+
+router.post('/participate/:id', auth, async (req, res) => {
+    const { id } = req.params;
+    const userId = req.user.userId;
+
+    try {
+        const [user, event] = await Promise.all([
+            User.findById(userId),
+            Event.findById(id)
+        ]);
+
+        if (!user || !event) {
+            return res.status(404).json({ message: 'User or Event not found' });
+        }
+
+        
+        if (event.participants.includes(userId)) {
+            return res.status(400).json({ message: 'You are Already Participating in this Event' });
+        }
+
+        
+        user.events.push(id);
+        event.participants.push(userId);
+
+        await Promise.all([
+            User.findByIdAndUpdate(userId, { $push: { events: id } }),
+            Event.findByIdAndUpdate(id, { $push: { participants: userId } })
+        ]);
+
+        res.status(200).json({ message: 'Event participation added successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
+
+//  Get All Events
+router.get('/all-events',  async (req, res) => {
+    try {
+        const events = await Event.find();
+        res.json(events);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+// Get Single Event
+router.get('/event/:id',  async (req, res) => {
+    try {
+        const event = await Event.findById(req.params.id).populate('participants');
+        res.json(event);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+//  Get My Events
+
+router.get('/my-events', auth, async (req, res) => {
+    try {
+        const { userId } = req.user;
+        const user = await User.findById(userId).populate('events'); 
+        res.json(user.events); 
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 
 

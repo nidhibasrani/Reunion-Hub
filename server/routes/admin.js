@@ -153,11 +153,6 @@ router.post('/add-event', auth, eventImage('featuredImage', 'gallery'), async (r
 //  Get All Events
 router.get('/all-events', auth, async (req, res) => {
     try {
-        const { role } = req.user;
-        console.log(role);
-        if (role !== 'admin') {
-            return res.status(401).json({ msg: "Unauthorized" });
-        }
         const events = await Event.find();
         res.json(events);
     } catch (err) {
@@ -170,7 +165,7 @@ router.get('/all-events', auth, async (req, res) => {
 router.delete('/delete-event/:id', auth, async (req, res) => {
     try {
         const { role } = req.user;
-    
+
         if (role !== 'admin') {
             return res.status(401).json({ msg: "Unauthorized" });
         }

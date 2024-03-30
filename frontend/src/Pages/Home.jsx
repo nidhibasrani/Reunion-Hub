@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { image } from "../../helper/";
 import EventCard from "../components/EventCard";
 import WhyUs from "../components/WhyUs";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const sliderSettings = {
@@ -23,6 +24,9 @@ const Home = () => {
     { id: 3, src: image.slider3, alt: "Image 3" },
   ];
 
+  const user = useSelector(state => state.auth.user);
+  
+  console.log('user from redux', user)
   return (
     <>
       <div className="home ">
