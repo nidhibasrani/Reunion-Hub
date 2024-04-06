@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios'
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -6,6 +7,10 @@ import { image } from "../../helper/";
 import EventCard from "../components/EventCard";
 import WhyUs from "../components/WhyUs";
 import { useSelector } from "react-redux";
+import Testimonials from "../components/Testimonials";
+import Hero from "../components/Hero";
+
+
 
 const Home = () => {
   const sliderSettings = {
@@ -25,25 +30,33 @@ const Home = () => {
   ];
 
   const user = useSelector(state => state.auth.user);
-  
-  console.log('user from redux', user)
+
   return (
     <>
-      <div className="home ">
+      <div className="home py-10 ">
         {/* <h1 className="text-3xl text-red-500">Home</h1> */}
-        <Slider {...sliderSettings}>
+        {/* <Slider {...sliderSettings}>
           {images.map((img) => (
             <div className="w-screen h-screen" key={img.id}>
               <img className="w-screen h-screen" src={img.src} alt={img.alt} />
             </div>
           ))}
-        </Slider>
+        </Slider> */}
+        <Hero />
       </div>
-      <div className="flex justify-center items-center py-20">
-        <EventCard />
+      <div className="text-center  ">
+        <h1 className="text-3xl montserrat my-10 font-bold"> Upcoming Events</h1>
+        <div className="">
+
+          <EventCard />
+
+        </div>
+      <div className="my-10">
+        <Testimonials />
       </div>
-      <div className="flex flex-col items-center">
-        <WhyUs/>
+        <div className="flex flex-col items-center my-10 pb-10">
+          <WhyUs />
+        </div>
       </div>
     </>
   );

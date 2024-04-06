@@ -49,7 +49,7 @@ const Register = () => {
         <div className="flex justify-center items-center h-screen bg-gray-100">
             <ToastContainer />
             <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
-                <h2 className="text-3xl mb-6 font-bold text-center">Register</h2>
+                <h2 className="text-3xl mb-6 font-bold text-center montserrat">Register</h2>
                 {message && <div className="text-red-500 mb-4">{message}</div>}
                 <div className="mb-4">
                     <label htmlFor="userName" className="block text-gray-700">Username</label>
@@ -76,7 +76,7 @@ const Register = () => {
                     <input type="file" id="profileImage" name="profileImage" onChange={handleFileChange} className="form-input mt-1 block w-full rounded" />
                 </div>
                 <div className="flex items-center justify-center">
-                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Register</button>
+                    <button type="submit" className="bg-orange hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Register</button>
                 </div>
             </form>
         </div>

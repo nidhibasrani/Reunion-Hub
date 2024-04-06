@@ -7,15 +7,19 @@ import Footer from "./components/Footer.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./redux/store/store.js";
+import { ChakraProvider } from "@chakra-ui/react";
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
-      <Provider store={store}>
-        <Header />
-        <App />
-        <Footer />
-      </Provider>
+      <ChakraProvider>
+        <Provider store={store}>
+          <Header />
+          <App />
+          <Footer />
+        </Provider>
+      </ChakraProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

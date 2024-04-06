@@ -150,7 +150,7 @@ router.post('/participate/:id', auth, async (req, res) => {
 router.get('/all-events',  async (req, res) => {
     try {
         const events = await Event.find();
-        res.json(events);
+        res.status(200).json(events);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

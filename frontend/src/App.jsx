@@ -13,8 +13,12 @@ import { useEffect } from 'react'
 import { getMe } from './redux/features/AuthSlice'
 import MyEvents from './Pages/MyEvents'
 
+import Chat from './Pages/Chat'
+import Contact from './Pages/Contact'
+import About from './Pages/About'
 
 function App() {
+
 
   let { id } = useParams();
   const dispatch = useDispatch();
@@ -25,6 +29,8 @@ function App() {
     if (isAuthenticated) {
       dispatch(getMe());
     }
+
+    
   }, [isAuthenticated]);
 
 
@@ -39,6 +45,7 @@ function App() {
         <Route element={<PrivateCheck />}>
           <Route path='/user-dashboard' element={<UserDashboard />} />
           <Route path='/my-events' element={<MyEvents />} />
+          <Route path='/my-chats' element={<Chat />} />
         </Route>
 
         <Route path='/' element={<Home />} />
@@ -46,6 +53,8 @@ function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/events' element={<Event />} />
         <Route path={`/event/:id`} element={<SingleEvent />} />
+        <Route path='/contact-us' element={<Contact />} />
+        <Route path='/about-us' element={<About />} />
         <Route path='*' element={<NotFound />} />
 
 

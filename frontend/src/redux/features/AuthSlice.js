@@ -86,6 +86,7 @@ const authSlice = createSlice({
       .addCase(getMe.rejected, (state, action) => {
         state.userProfileLoading = false;
         state.userProfileError = action.payload;
+        state.isAuthenticated = false;
       });
   },
 });

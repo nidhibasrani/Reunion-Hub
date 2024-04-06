@@ -1,3 +1,51 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.orange{
+    color: #dd6b20;
+}
+.dBlue {
+    color : #001524;
+}
+
+@font-face {
+    font-family: montserrat;
+    src: url('./assets/Montserrat-Regular.ttf');
+  }
+  
+  .montserrat{
+    font-family: montserrat;
+    font-weight: 900;
+  }
+
+  @font-face {
+    font-family: oswald;
+    src: url('./assets/Oswald.ttf');
+  }
+  
+  .oswald{
+    font-family: oswald;
+    
+  }
+
+
+ .slick-slide{
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+ }
+ .slick-next{
+  background: #dd6b20;
+ }
+ .slick-prev{
+  background: #dd6b20;
+ }
+
+  .slick-next:hover{
+  background: #dd6b20;
+ }
+  .slick-prev:hover{
+  background: #dd6b20;
+ }

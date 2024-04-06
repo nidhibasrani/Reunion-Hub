@@ -1,0 +1,152 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import axios from '../axios';
+import { io } from 'socket.io-client'
+
+const Chat = () => {
+    const [chats, setChats] = useState([]);
+    const [selectedChatMessages, setSelectedChatMessages] = useState([]);
+    const [messageInput, setMessageInput] = useState('');
+    const user = useSelector(state => state.auth.user);
+    const [selectedConversationId, setSelectedConversationId] = useState(null);
+    const socket = useMemo(() => io('http://localhost:5000'), []);
+    const userId = user?._id;
+    useEffect(() => {
+        // Check if there is a selected conversation ID stored in localStorage
+        fetchChats();
+        const storedConversationId = localStorage.getItem('selectedConversationId');
+        if (storedConversationId) {
+            setSelectedConversationId(storedConversationId);
+            fetchMessagesForConversation(storedConversationId);
+        } else {
+            fetchChats();
+        }
+    }, []);
+
+    const fetchChats = async () => {
+        try {
+            const response = await axios.get(`chat/conversations/${user?._id}`);
+            setChats(response.data);
+            console.log('chats', response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const fetchMessagesForConversation = async (conversationId) => {
+        try {
+            const response = await axios.get(`chat/conversation/${conversationId}/messages`);
+            setSelectedChatMessages(response.data);
+            console.log('chat messages', response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleChatClick = (conversationId) => {
+        // Store the selected conversation ID in localStorage
+        localStorage.setItem('selectedConversationId', conversationId);
+        setSelectedConversationId(conversationId);
+        fetchMessagesForConversation(conversationId);
+    };
+
+    const sendMessage = async () => {
+        // try {
+        //     const response = await axios.post(`chat/conversation/${selectedConversationId}/message`, {
+        //         receiver: chats.find(chat => chat._id === selectedConversationId).receiver._id,
+        //         content: messageInput
+        //     });
+        //     setSelectedChatMessages(prevMessages => [...prevMessages, response.data]);
+        //     setMessageInput('');
+        // } catch (error) {
+        //     console.log(error);
+        // }
+        try {
+            // Find the conversation corresponding to the selected conversation ID
+            const selectedConversation = chats.find(chat => chat._id === selectedConversationId);
+
+            // Extract receiver's ID from the conversation
+            const receiverId = selectedConversation?.receiver?._id;
+
+            if (receiverId) {
+                // Emit the message to the server with the recipient's user ID
+                socket.emit('send_message', {
+                    userId: receiverId,
+                    message: messageInput
+                });
+                setMessageInput(''); // Clear message input after sending
+            } else {
+                console.log("Recipient's user ID not found");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
+
+    useEffect((userId) => {
+        socket.on('connect', () => {
+            console.log("connected", socket.id);
+
+            // Upon connection, authenticate with the server
+            socket.emit('authenticate', userId); // Assuming userId is already defined
+        });
+
+        socket.on('received-message', (data) => {
+            console.log("received message", data);
+        });
+
+        // Clean up event listeners on component unmount
+        return () => {
+            socket.off('connect');
+            socket.off('received-message');
+        };
+    }, [userId, socket]);
+
+    return (
+        <div className="flex h-screen">
+            <div className="w-1/4 bg-gray-200 p-4">
+                <div className="mb-4">
+                    <h2 className="text-lg font-bold mb-2">Chats</h2>
+                    <ul>
+                        {chats.map((chat) => (
+                            <li key={chat._id} className="py-2 px-4 bg-gray-300 rounded-lg mb-2" onClick={() => handleChatClick(chat._id)}>
+                                {chat.sender._id === user._id ? chat.receiver.userName : chat.sender.userName}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+            <div className="flex-1 bg-gray-100 p-4">
+                <h2 className="text-lg font-bold mb-2">Chat with User</h2>
+                <div className="bg-white p-4 rounded-lg shadow-md">
+                    {selectedChatMessages.map((message) => (
+                        <div key={message._id} className={`mb-2 ${message.sender === user._id ? 'flex justify-end' : 'flex justify-start'}`}>
+                            <div className={`p-2 rounded-lg max-w-xs ${message.sender === user._id ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}>
+                                {message.content}
+                            </div>
+                        </div>
+                    ))}
+                    <div className="mt-4 flex">
+                        <input
+                            type="text"
+                            placeholder="Type your message..."
+                            value={messageInput}
+                            onChange={(e) => setMessageInput(e.target.value)}
+                            className="w-full border rounded-lg px-4 py-2 mr-2"
+                        />
+                        <button
+                            className="bg-blue-500 text-white rounded-lg px-4 py-2"
+                            onClick={sendMessage}
+                        >
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Chat;
