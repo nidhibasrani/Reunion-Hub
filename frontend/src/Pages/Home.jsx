@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios'
+import axios from "axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -9,7 +9,6 @@ import WhyUs from "../components/WhyUs";
 import { useSelector } from "react-redux";
 import Testimonials from "../components/Testimonials";
 import Hero from "../components/Hero";
-
 
 
 const Home = () => {
@@ -29,7 +28,7 @@ const Home = () => {
     { id: 3, src: image.slider3, alt: "Image 3" },
   ];
 
-  const user = useSelector(state => state.auth.user);
+  const user = useSelector((state) => state.auth.user);
 
   return (
     <>
@@ -45,15 +44,16 @@ const Home = () => {
         <Hero />
       </div>
       <div className="text-center  ">
-        <h1 className="text-3xl montserrat my-10 font-bold"> Upcoming Events</h1>
+        <h1 className="text-3xl montserrat my-10 font-bold">
+          {" "}
+          Upcoming Events
+        </h1>
         <div className="">
-
           <EventCard />
-
         </div>
-      <div className="my-10">
-        <Testimonials />
-      </div>
+        <div className="my-10">
+          <Testimonials />
+        </div>
         <div className="flex flex-col items-center my-10 pb-10">
           <WhyUs />
         </div>

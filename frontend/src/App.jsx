@@ -16,6 +16,7 @@ import MyEvents from './Pages/MyEvents'
 import Chat from './Pages/Chat'
 import Contact from './Pages/Contact'
 import About from './Pages/About'
+import SingleUser from './Pages/SingleUser'
 
 function App() {
 
@@ -49,6 +50,7 @@ function App() {
         </Route>
 
         <Route path='/' element={<Home />} />
+        <Route path='/single-user/:userId' element={<SingleUser />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/events' element={<Event />} />

@@ -80,7 +80,7 @@ const Login = () => {
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
-          {error && <p className="text-red-500">{error}</p>}
+          {/* {error && <p className="text-red-500">{error}</p>}   */}
         </form>
       </div>
     </div>

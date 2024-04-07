@@ -122,7 +122,7 @@ router.post('/add-event', auth, eventImage('featuredImage', 'gallery'), async (r
     if (role !== 'admin') {
         return res.status(401).json({ msg: "Unauthorized" });
     }
-    const { title, description } = req.body;
+    const { title, description, price } = req.body;
 
     // Check if all required fields are provided
     if (!title || !description) {
@@ -133,6 +133,7 @@ router.post('/add-event', auth, eventImage('featuredImage', 'gallery'), async (r
         const newEvent = new Event({
             title,
             description,
+            price,
 
             featuredImage: req.files['featuredImage'] ? req.files['featuredImage'][0].path : null,
             gallery: req.files['gallery'] ? req.files['gallery'].map(file => file.path) : []

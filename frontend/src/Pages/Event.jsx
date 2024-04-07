@@ -14,7 +14,7 @@ const Event = () => {
     try {
       const res = await axios.get(`${apiUrl}/user/all-events`);
       if (res.status === 200) {
-        console.log('Events:', res.data);
+        // console.log('Events:', res.data);
         setEvents(res.data);
       }
     } catch (error) {

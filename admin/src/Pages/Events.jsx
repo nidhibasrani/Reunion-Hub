@@ -4,6 +4,7 @@ import axios from '../axios';
 const Events = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
   const [featuredImage, setFeaturedImage] = useState(null);
   const [galleryImages, setGalleryImages] = useState([]);
 
@@ -21,6 +22,7 @@ const Events = () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
+    formData.append('price', price);
     formData.append('featuredImage', featuredImage);
     for (let i = 0; i < galleryImages.length; i++) {
       formData.append('gallery', galleryImages[i]);
@@ -35,6 +37,7 @@ const Events = () => {
       // Clear form fields upon successful submission
       setTitle('');
       setDescription('');
+      setPrice('');
       setFeaturedImage(null);
       setGalleryImages([]);
       alert('Event added successfully!');
@@ -57,6 +60,10 @@ const Events = () => {
           <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" rows="4" required />
         </div>
         <div className="mb-4">
+          <label htmlFor="price" className="block text-gray-700 font-bold mb-2">Price:</label>
+          <input type='number' id="price" value={price} onChange={(e) => setPrice(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" rows="4" required />
+        </div>
+        <div className="mb-4">
           <label htmlFor="featuredImage" className="block text-gray-700 font-bold mb-2">Featured Image:</label>
           <input type="file" id="featuredImage" name="featuredImage" onChange={handleFileChange} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" />
         </div>
@@ -71,3 +78,6 @@ const Events = () => {
 };
 
 export default Events;
+
+
+

@@ -24,9 +24,14 @@ const eventSchema = new mongoose.Schema({
     participants : [{
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User'
-    }]
+    }],
+    price : {
+        type : Number,
+        
 
-});
+    }
+
+},{timestamps : true});
 
 
 module.exports = mongoose.model('Event', eventSchema);

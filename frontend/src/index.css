@@ -49,3 +49,11 @@
   .slick-prev:hover{
   background: #dd6b20;
  }
+
+
+ .splide__pagination__page{
+  background: #001524;
+ }
+ .splide__pagination__page.is-active{
+  background: #dd6b20;
+ }
