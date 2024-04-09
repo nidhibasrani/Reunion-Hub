@@ -7,7 +7,7 @@ const auth = require("../middleware/auth");
 const Event = require("../models/Event");
 const axios = require("axios");
 const crypto = require("crypto");
-const frontUrl = process.env.FRONT_URL
+const frontUrl = process.env.FRONT_URL;
 
 // user register
 router.post("/register", upload.single("profileImage"), async (req, res) => {
@@ -100,19 +100,18 @@ router.get("/me", auth, async (req, res) => {
 const MERCHANT_ID = process.env.MERCHANT_ID;
 const SALT_KEY = process.env.SALT_KEY;
 function generateUniqueId() {
-    const timestamp = Date.now().toString(36); // Convert current timestamp to base36 string
-    const randomString = Math.random().toString(36).substr(2, 5); // Generate a random string
-    return timestamp + randomString; // Concatenate timestamp and random string
-  }
-
+  const timestamp = Date.now().toString(36); // Convert current timestamp to base36 string
+  const randomString = Math.random().toString(36).substr(2, 5); // Generate a random string
+  return timestamp + randomString; // Concatenate timestamp and random string
+}
 
 async function phonePay(amount, userId, eventId) {
   try {
     const merchantTransactionId = generateUniqueId();
-   console.log(merchantTransactionId)
+    console.log(merchantTransactionId);
 
     const data = {
-      merchantId:MERCHANT_ID,
+      merchantId: MERCHANT_ID,
       merchantTransactionId: merchantTransactionId,
       merchantUserId: userId,
       amount: amount * 100,
@@ -123,11 +122,8 @@ async function phonePay(amount, userId, eventId) {
       },
     };
 
-
-  
-
     const base64Payload = Buffer.from(JSON.stringify(data)).toString("base64");
-  
+
     const saltKey = SALT_KEY;
     const saltIndex = 1;
     const payloadWithApiEndpoint = base64Payload + "/pg/v1/pay" + saltKey;
@@ -135,7 +131,7 @@ async function phonePay(amount, userId, eventId) {
       crypto.createHash("sha256").update(payloadWithApiEndpoint).digest("hex") +
       "###" +
       saltIndex;
-   
+
     const response = await axios.post(
       "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay",
       { request: base64Payload },
@@ -146,8 +142,6 @@ async function phonePay(amount, userId, eventId) {
         },
       }
     );
-
-    
 
     return response.data; // Return the payment response
   } catch (error) {
@@ -187,59 +181,62 @@ async function participateInEvent(userId, eventId) {
 
 // status check
 
-router.get("/status/:merchantTransactionId/:userId/:eventId", async (req, res) => {
-  try {
-    const { merchantTransactionId, userId, eventId } = req.params;
-    console.log("event Id:", eventId); // Log userId to check its value
+router.get(
+  "/status/:merchantTransactionId/:userId/:eventId",
+  async (req, res) => {
+    try {
+      const { merchantTransactionId, userId, eventId } = req.params;
+      console.log("event Id:", eventId); // Log userId to check its value
 
-    // Ensure userId is not undefined
-    if (!userId) {
-      return res.status(400).json({ error: "userId is undefined" });
-    }
-
-    // Assuming MERCHANT_ID is defined somewhere in your code
-
-    // Calculate X-VERIFY header
-    const saltKey = SALT_KEY; // Get from PhonePe documentation
-    const saltIndex = 1; // Get from PhonePe documentation
-    const xVerify =
-      crypto
-        .createHash("sha256")
-        .update(
-          `/pg/v1/status/${MERCHANT_ID}/${merchantTransactionId}${saltKey}`
-        )
-        .digest("hex") +
-      "###" +
-      saltIndex;
-
-    const options = {
-      method: "get",
-      url: `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${MERCHANT_ID}/${merchantTransactionId}`,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-MERCHANT-ID":MERCHANT_ID,
-        "X-VERIFY": xVerify,
-      },
-    };
-
-    axios.request(options).then(async function (response) {
-      console.log("status report", response.data);
-      if (response.data.code === "PAYMENT_SUCCESS") {
-        // Payment is successful, no need to redirect
-        const result = await participateInEvent(userId, eventId);
-        return res.status(200).json(response.data).redirect(frontUrl);
-     
-      } else {
-        // Payment failed or pending
-        return res.status(200).json({ message: "Payment not successful" });
+      // Ensure userId is not undefined
+      if (!userId) {
+        return res.status(400).json({ error: "userId is undefined" });
       }
-    });
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: "Internal Server Error" }); // Send error response to the client
+
+      // Assuming MERCHANT_ID is defined somewhere in your code
+
+      // Calculate X-VERIFY header
+      const saltKey = SALT_KEY; // Get from PhonePe documentation
+      const saltIndex = 1; // Get from PhonePe documentation
+      const xVerify =
+        crypto
+          .createHash("sha256")
+          .update(
+            `/pg/v1/status/${MERCHANT_ID}/${merchantTransactionId}${saltKey}`
+          )
+          .digest("hex") +
+        "###" +
+        saltIndex;
+
+      const options = {
+        method: "get",
+        url: `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${MERCHANT_ID}/${merchantTransactionId}`,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "X-MERCHANT-ID": MERCHANT_ID,
+          "X-VERIFY": xVerify,
+        },
+      };
+
+      axios.request(options).then(async function (response) {
+        console.log("status report", response.data);
+        if (response.data.code === "PAYMENT_SUCCESS") {
+          // Payment is successful, no need to redirect
+       
+          const result = await participateInEvent(userId, eventId);
+          res.redirect('http://localhost:3000/my-events');
+        } else {
+          // Payment failed or pending
+          return res.status(200).json({ message: "Payment not successful" });
+        }
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({ error: "Internal Server Error" }); // Send error response to the client
+    }
   }
-});
+);
 
 // Participate In Event
 
@@ -248,9 +245,7 @@ router.post("/participate/:eventId", auth, async (req, res) => {
   const userId = req.user.userId;
   const amount = req.body.amount;
 
-
   try {
-
     const [user, event] = await Promise.all([
       User.findById(userId),
       Event.findById(eventId),
@@ -277,7 +272,7 @@ router.post("/participate/:eventId", auth, async (req, res) => {
 //  Get All Events
 router.get("/all-events", async (req, res) => {
   try {
-    const events = await Event.find().sort({createdAt : -1});
+    const events = await Event.find().sort({ createdAt: -1 });
     res.status(200).json(events);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -306,34 +301,29 @@ router.get("/my-events", auth, async (req, res) => {
   }
 });
 
+//  user profile edit
 
+router.post("/edit-profile", auth, async (req, res) => {
+  try {
+    const { userId } = req.user;
 
-//  user profile edit 
-
-
-router.post('/edit-profile', auth, async (req, res)=>{
-try {
-  const {userId} = req.user;
-
-  const user = await User.findByIdAndUpdate(userId, req.body, {new: true});
-  res.json(user);
-} catch (error) {
-  console.log(error)
-}
-})
-
-
+    const user = await User.findByIdAndUpdate(userId, req.body, { new: true });
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 //  get single user
 
-router.get('/user/:userId', auth, async (req, res)=>{
+router.get("/user/:userId", auth, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
-    if(!user) return res.status(404).json({message: "User not found"})
+    if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json(user);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-})
+});
 
 module.exports = router;
