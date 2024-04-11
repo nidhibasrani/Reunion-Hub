@@ -7,6 +7,7 @@ const auth = require("../middleware/auth");
 const Event = require("../models/Event");
 const axios = require("axios");
 const crypto = require("crypto");
+const Cms = require("../models/Cms");
 const frontUrl = process.env.FRONT_URL;
 
 // user register
@@ -222,10 +223,10 @@ router.get(
       axios.request(options).then(async function (response) {
         console.log("status report", response.data);
         if (response.data.code === "PAYMENT_SUCCESS") {
-          // Payment is successful, no need to redirect
+         
        
           const result = await participateInEvent(userId, eventId);
-          res.redirect('http://localhost:3000/my-events');
+          res.redirect(frontUrl);
         } else {
           // Payment failed or pending
           return res.status(200).json({ message: "Payment not successful" });
@@ -323,6 +324,25 @@ router.get("/user/:userId", auth, async (req, res) => {
     res.status(200).json(user);
   } catch (error) {
     console.log(error);
+  }
+});
+
+
+// get all gallery images
+
+router.get("/website-gallery",  async (req, res) => {
+  try {
+   
+
+    const cmsDocuments = await Cms.find();
+    if (cmsDocuments.length === 0) {
+      return res.status(404).json({ message: "Cms document not found" });
+    }
+
+    res.status(200).json(cmsDocuments);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
