@@ -7,6 +7,8 @@ import Sidebar from './components/Sidebar';
 import ManageUsers from './Pages/ManageUsers';
 import Events from './Pages/Events';
 import DeleteEvent from './Pages/DeleteEvent';
+import Gallery from './Pages/Gallery';
+import ManageGallery from './Pages/ManageGallery';
 
 function App() {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
@@ -40,6 +42,8 @@ function App() {
           <Route path="/manage-users" element={<ManageUsers />} />
           <Route path="/manage-events" element={<Events />} />
           <Route path="/delete-event" element={<DeleteEvent />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/manage-gallery" element={<ManageGallery />} />
         </Route>
         <Route path="/login" element={<Login />} />
       </Routes>
