@@ -62,6 +62,29 @@ const Sidebar = () => {
           </AccordionPanel>
 
         </AccordionItem>
+        <AccordionItem>
+          <h2 className='text-white'>
+            <AccordionButton>
+              <Box as="span" flex='1' textAlign='left'>
+                Website CMS
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+          </h2>
+          <AccordionPanel pb={4}>
+            <ul className='px-5 montserrat flex flex-col gap-3 text-white '>
+              <li className='flex items-center'>
+                <MdEvent className="mr-2" />
+                <Link to='/gallery'>Add Gallery</Link>
+              </li>
+              <li className='flex items-center'>
+                <MdDelete className="mr-2" />
+                <Link to='/manage-gallery'>Manage Gallery</Link>
+              </li>
+            </ul>
+          </AccordionPanel>
+
+        </AccordionItem>
 
 
       </Accordion>

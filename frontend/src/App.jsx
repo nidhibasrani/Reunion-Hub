@@ -17,6 +17,7 @@ import Chat from './Pages/Chat'
 import Contact from './Pages/Contact'
 import About from './Pages/About'
 import SingleUser from './Pages/SingleUser'
+import Gallery from './Pages/Gallery'
 
 function App() {
 
@@ -57,6 +58,7 @@ function App() {
         <Route path={`/event/:id`} element={<SingleEvent />} />
         <Route path='/contact-us' element={<Contact />} />
         <Route path='/about-us' element={<About />} />
+        <Route path='/gallery' element={<Gallery />} />
         <Route path='*' element={<NotFound />} />
 
 
