@@ -9,6 +9,7 @@ import Events from './Pages/Events';
 import DeleteEvent from './Pages/DeleteEvent';
 import Gallery from './Pages/Gallery';
 import ManageGallery from './Pages/ManageGallery';
+import ContactMessages from './Pages/ContactMessages';
 
 function App() {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
@@ -44,6 +45,7 @@ function App() {
           <Route path="/delete-event" element={<DeleteEvent />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/manage-gallery" element={<ManageGallery />} />
+          <Route path="/contact-messages" element={<ContactMessages />} />
         </Route>
         <Route path="/login" element={<Login />} />
       </Routes>
