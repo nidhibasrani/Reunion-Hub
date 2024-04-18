@@ -21,7 +21,7 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
 
   if (!userName || !firstName || !lastName || !password || !enrollmentNumber) {
     return res.status(400).json({ message: "All fields are required" });
-  }
+  } 
 
 
   if(!enrollNumbers.includes(enrollmentNumber)){
