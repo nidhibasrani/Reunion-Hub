@@ -8,7 +8,11 @@ const Event = require("../models/Event");
 const axios = require("axios");
 const crypto = require("crypto");
 const Cms = require("../models/Cms");
+const Contact = require("../models/Contact");
 const frontUrl = process.env.FRONT_URL;
+const {enrollNumbers} = require('../data/Enrollment')
+
+
 
 // user register
 router.post("/register", upload.single("profileImage"), async (req, res) => {
@@ -17,6 +21,11 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
 
   if (!userName || !firstName || !lastName || !password || !enrollmentNumber) {
     return res.status(400).json({ message: "All fields are required" });
+  } 
+
+
+  if(!enrollNumbers.includes(enrollmentNumber)){
+    return res.status(400).json({ message: "Invalid Enrollment Number." });
   }
 
   try {
@@ -24,6 +33,8 @@ router.post("/register", upload.single("profileImage"), async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "Username already taken" });
     }
+
+
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -223,8 +234,6 @@ router.get(
       axios.request(options).then(async function (response) {
         console.log("status report", response.data);
         if (response.data.code === "PAYMENT_SUCCESS") {
-         
-       
           const result = await participateInEvent(userId, eventId);
           res.redirect(frontUrl);
         } else {
@@ -327,13 +336,10 @@ router.get("/user/:userId", auth, async (req, res) => {
   }
 });
 
-
 // get all gallery images
 
-router.get("/website-gallery",  async (req, res) => {
+router.get("/website-gallery", async (req, res) => {
   try {
-   
-
     const cmsDocuments = await Cms.find();
     if (cmsDocuments.length === 0) {
       return res.status(404).json({ message: "Cms document not found" });
@@ -345,5 +351,34 @@ router.get("/website-gallery",  async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+// Submit contact form
+
+router.post("/contact-us", async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+
+    // Assuming you have a Contact model imported
+    const contact = new Contact({
+      name,
+      email,
+      message,
+    });
+
+    // Save the new contact entry
+    await contact.save();
+
+    // Optionally, you can send a response to the client
+    res.status(200).json({ message: "Contact information saved successfully" });
+  } catch (error) {
+    console.log(error);
+    // Handle errors appropriately
+    res
+      .status(500)
+      .json({ error: "An error occurred while processing your request" });
+  }
+});
+
+
 
 module.exports = router;

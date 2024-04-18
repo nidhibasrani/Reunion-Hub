@@ -10,6 +10,7 @@ const Cms = require("../models/Cms");
 const websiteGallery = require("../middleware/Website");
 const isAdmin = require("../middleware/isAdmin");
 const auth = require("../middleware/auth");
+const Contact = require("../models/Contact");
 
 // admin register
 
@@ -239,37 +240,62 @@ router.get("/website-gallery", auth, async (req, res) => {
   }
 });
 
-
-
 //  delete image from gallery
 
-router.delete('/website-gallery/:id/:imageIndex', auth, async (req, res) => {
-    try {
-      const { role } = req.user;
-      if (role !== 'admin') {
-        return res.status(401).json({ msg: 'Unauthorized' });
-      }
-  
-      const cmsId = req.params.id;
-      const imageIndex = req.params.imageIndex;
-  
-  
-      const cmsDocument = await Cms.findById(cmsId);
-      if (!cmsDocument) {
-        return res.status(404).json({ message: 'Cms document not found' });
-      }
-  
-    
-      cmsDocument.gallery.splice(imageIndex, 1);
-  
-      await cmsDocument.save();
-  
-      res.status(200).json({ message: 'Image deleted successfully' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
+router.delete("/website-gallery/:id/:imageIndex", auth, async (req, res) => {
+  try {
+    const { role } = req.user;
+    if (role !== "admin") {
+      return res.status(401).json({ msg: "Unauthorized" });
     }
-  });
-  
+
+    const cmsId = req.params.id;
+    const imageIndex = req.params.imageIndex;
+
+    const cmsDocument = await Cms.findById(cmsId);
+    if (!cmsDocument) {
+      return res.status(404).json({ message: "Cms document not found" });
+    }
+
+    cmsDocument.gallery.splice(imageIndex, 1);
+
+    await cmsDocument.save();
+
+    res.status(200).json({ message: "Image deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//  get all contact messages
+
+router.get("/contact-messages", auth, async (req, res) => {
+  try {
+    const { role } = req.user;
+    if (role !== "admin") {
+      return res.status(401).json({ msg: "Unauthorized" });
+    }
+    const contact = await Contact.find();
+
+    return res.status(200).json(contact);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
+router.delete("/contact-messages/:id", auth, async (req, res) => {
+  try {
+    const { role } = req.user;
+    if (role !== "admin") {
+      return res.status(401).json({ msg: "Unauthorized" });
+    }
+    const contact = await Contact.findByIdAndDelete(req.params.id);
+    return res.status(200).json(contact);
+  } catch (error) {
+    console.log(error);
+  }
+}); 
 
 module.exports = router;
