@@ -1,5 +1,5 @@
 import image from "./image";
 
-export  {
+export   {
     image
 }

@@ -22,5 +22,5 @@ const fileFilter = (req, file, cb) => {
 const eventImage = (fieldName) => multer({ 
     storage: storage,
     fileFilter: fileFilter,
-}).fields([{ name: fieldName, maxCount: 1 }, { name: 'gallery', maxCount: 5 }]);
+}).fields([{ name: fieldName, maxCount: 1 }, { name: 'gallery', maxCount: 10 }]);
 module.exports = eventImage;
