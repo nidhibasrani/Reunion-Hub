@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const mongoUri ='mongodb://127.0.0.1/reunion-hub';
+const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1/reunion-hub';
 
 const connectDb = async () => {
     try {
