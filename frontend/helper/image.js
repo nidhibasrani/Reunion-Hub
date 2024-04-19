@@ -6,7 +6,7 @@ import people from "../public/people.png"
 import handshake from "../public/handshake.png"
 import satisfaction from "../public/satisfaction.png"
 import reunion from "../public/reunion.mp4"
-import aboutimage from "../public/aboutUs.webp"
+import aboutimage from "../public/aboutUs.jpg"
 export default  {
     logo,slider1,slider2,slider3,people,handshake,satisfaction,reunion,aboutimage
     
