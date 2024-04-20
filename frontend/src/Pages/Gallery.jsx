@@ -5,7 +5,9 @@ const Gallery = () => {
   const [gallery, setGallery] = useState([]);
   const fetchGallery = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_APP_API_URL}/user/website-gallery`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_APP_API_URL}/user/website-gallery`
+      );
       if (res.status === 200) {
         setGallery(res.data);
         console.log(res.data);
@@ -40,7 +42,6 @@ const Gallery = () => {
                     alt=""
                     className="w-[500px] h-full object-cover"
                   />
-                 
                 </div>
               ))}
             </div>

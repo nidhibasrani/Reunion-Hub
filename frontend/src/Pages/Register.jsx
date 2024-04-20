@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
+    const navigate = useNavigate()
     const [formData, setFormData] = useState({
         userName: '',
         firstName: '',
         lastName: '',
         password: '',
+        email: '',
         enrollmentNumber: '',
         profileImage: null,
     });
     const [message, setMessage] = useState('');
+    const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,8 +26,43 @@ const Register = () => {
         setFormData({ ...formData, profileImage: e.target.files[0] });
     };
 
+    const validateForm = () => {
+        let isValid = true;
+        const errors = {};
+
+        if (formData.userName.length < 4) {
+            errors.userName = 'Username must be at least 4 characters long';
+            isValid = false;
+        }
+
+        if (formData.password.length < 8) {
+            errors.password = 'Password must be at least 8 characters long';
+            isValid = false;
+        }
+
+        // Simple email validation regex
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            errors.email = 'Please enter a valid email address';
+            isValid = false;
+        }
+
+        // Simple enrollment number validation
+        if (!formData.enrollmentNumber.trim()) {
+            errors.enrollmentNumber = 'Enrollment number is required';
+            isValid = false;
+        }
+
+        setErrors(errors);
+        return isValid;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        if (!validateForm()) {
+            return;
+        }
         
         try {
             const formDataToSend = new FormData();
@@ -31,11 +70,14 @@ const Register = () => {
             formDataToSend.append('firstName', formData.firstName);
             formDataToSend.append('lastName', formData.lastName);
             formDataToSend.append('password', formData.password);
+            formDataToSend.append('email', formData.email);
             formDataToSend.append('enrollmentNumber', formData.enrollmentNumber);
             formDataToSend.append('profileImage', formData.profileImage);
 
             const response = await axios.post(`${import.meta.env.VITE_APP_API_URL}/user/register`, formDataToSend);
             toast.success(response.data.message);
+            navigate('/login')
+
         } catch (error) {
             if (error.response && error.response.data && error.response.data.message) {
                 toast.error(error.response.data.message);
@@ -53,7 +95,8 @@ const Register = () => {
                 {message && <div className="text-red-500 mb-4">{message}</div>}
                 <div className="mb-4">
                     <label htmlFor="userName" className="block text-gray-700">Username</label>
-                    <input type="text" id="userName" name="userName" value={formData.userName} onChange={handleChange} className="form-input mt-1 block w-full rounded" required />
+                    <input type="text" id="userName" name="userName" value={formData.userName} onChange={handleChange} className={`form-input mt-1 block w-full rounded ${errors.userName && 'border-red-500'}`} required />
+                    {errors.userName && <p className="text-red-500 text-xs italic">{errors.userName}</p>}
                 </div>
                 <div className="mb-4">
                     <label htmlFor="firstName" className="block text-gray-700">First Name</label>
@@ -65,11 +108,18 @@ const Register = () => {
                 </div>
                 <div className="mb-4">
                     <label htmlFor="password" className="block text-gray-700">Password</label>
-                    <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} className="form-input mt-1 block w-full rounded" required />
+                    <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} className={`form-input mt-1 block w-full rounded ${errors.password && 'border-red-500'}`} required />
+                    {errors.password && <p className="text-red-500 text-xs italic">{errors.password}</p>}
+                </div>
+                <div className="mb-4">
+                    <label htmlFor="email" className="block text-gray-700">Email</label>
+                    <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className={`form-input mt-1 block w-full rounded ${errors.email && 'border-red-500'}`} required />
+                    {errors.email && <p className="text-red-500 text-xs italic">{errors.email}</p>}
                 </div>
                 <div className="mb-4">
                     <label htmlFor="enrollmentNumber" className="block text-gray-700">Enrollment Number</label>
-                    <input type="text" id="enrollmentNumber" name="enrollmentNumber" value={formData.enrollmentNumber} onChange={handleChange} className="form-input mt-1 block w-full rounded" required />
+                    <input type="text" id="enrollmentNumber" name="enrollmentNumber" value={formData.enrollmentNumber} onChange={handleChange} className={`form-input mt-1 block w-full rounded ${errors.enrollmentNumber && 'border-red-500'}`} required />
+                    {errors.enrollmentNumber && <p className="text-red-500 text-xs italic">{errors.enrollmentNumber}</p>}
                 </div>
                 <div className="mb-6">
                     <label htmlFor="profileImage" className="block text-gray-700">Profile Image</label>
