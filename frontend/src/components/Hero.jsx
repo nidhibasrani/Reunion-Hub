@@ -41,10 +41,9 @@ const Hero = () => {
           <div class="flex justify-center items-center lg:h-auto xl:w-5/12">
             {/* <img src={image.scsitimage} loading="lazy" alt="Photo by Fakurian Design" className="" />
              */}
-<video autoplay controls>
-  <source src={image.reunion} type="video/mp4" />
-</video>
-
+            <video autoPlay controls >
+              <source src={image.reunion} type="video/mp4" />
+            </video>
           </div>
         </section>
       </div>
