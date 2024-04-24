@@ -302,13 +302,13 @@ router.get("/event/:id", async (req, res) => {
 //  Get My Events
 
 router.get("/my-events", auth, async (req, res) => {
-  try {
-    const { userId } = req.user;
-    const user = await User.findById(userId).populate("events");
-    res.json(user.events);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  try{
+  const { userId } = req.user;
+  const user = await User.findById(userId).populate("events");
+  res.json(user.events);
+} catch (err) {
+  res.status(500).json({ error: err.message });
+}
 });
 
 //  user profile edit
@@ -316,7 +316,7 @@ router.get("/my-events", auth, async (req, res) => {
 router.post("/edit-profile", auth, async (req, res) => {
   try {
     const { userId } = req.user;
-
+    
     const user = await User.findByIdAndUpdate(userId, req.body, { new: true });
     res.json(user);
   } catch (error) {
