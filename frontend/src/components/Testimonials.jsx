@@ -1,5 +1,5 @@
 import React from 'react'
-
+import {image} from "../../helper/index"
 const Testimonials = () => {
     return (
         <div className="flex justify-center bg-[#001524] py-5">
@@ -10,7 +10,7 @@ const Testimonials = () => {
                         <div className="flex flex-col md:flex-row items-center justify-center">
                             <div className="items-center justify-center flex py-2">
                                 <div className="flex flex-col items-center justify-center text-center">
-                                    <img src="https://source.unsplash.com/150x150/?man,boy" alt="" className="rounded-full" />
+                                    <img src={image.avtar} alt="" className="rounded-full" />
                                     <div className="text-stone-600 font-medium m-2">Best Platform for Reunions. </div>
                                     <div className="font-bold">John Doe</div>
                                     <div className="text-cyan-600 italic"><a href="#">Client</a></div>
@@ -22,7 +22,7 @@ const Testimonials = () => {
                         <div className="flex flex-col md:flex-row items-center justify-center">
                             <div className="items-center justify-center flex py-2">
                                 <div className="flex flex-col items-center justify-center text-center">
-                                    <img src="https://source.unsplash.com/150x150/?girl" alt="" className="rounded-full" />
+                                    <img src={image.avtarr} alt="" className="rounded-full" />
                                     <div className="text-stone-600 font-medium m-2">Best Platform for Reunions.</div>
                                     <div className="font-bold">Jessie</div>
                                     <div className="text-cyan-600 italic"><a href="#">Client</a></div>
@@ -34,7 +34,7 @@ const Testimonials = () => {
                         <div className="flex flex-col md:flex-row items-center justify-center">
                             <div className="items-center justify-center flex py-2">
                                 <div className="flex flex-col items-center justify-center text-center">
-                                    <img src="https://source.unsplash.com/150x150/?girl,woman" alt="" className="rounded-full" />
+                                    <img src={image.avtarrr} alt="" className="rounded-full" />
                                     <div className="text-stone-600 font-medium m-2">Best Platform for Reunions.</div>
                                     <div className="font-bold">Davina Claire</div>
                                     <div className="text-cyan-600 italic"><a href="#">Client</a></div>

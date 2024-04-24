@@ -302,6 +302,7 @@ router.get("/event/:id", async (req, res) => {
 //  Get My Events
 
 router.get("/my-events", auth, async (req, res) => {
+  try{
   const { userId } = req.user;
   const user = await User.findById(userId).populate("events");
   res.json(user.events);
@@ -337,7 +338,6 @@ router.get("/user/:userId", auth, async (req, res) => {
 
 // get all gallery images
 
-try {
 router.get("/website-gallery", async (req, res) => {
   try {
     const cmsDocuments = await Cms.find();

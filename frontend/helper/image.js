@@ -7,7 +7,10 @@ import handshake from "../public/handshake.png"
 import satisfaction from "../public/satisfaction.png"
 import reunion from "../public/reunion.mp4"
 import aboutimage from "../public/aboutUs.webp"
+import avtar from "../public/avtar1.jpeg"
+import avtarr from "../public/avtar2.jpeg"
+import avtarrr from "../public/avtar3.jpeg"
 export default  {
-    logo,slider1,slider2,slider3,people,handshake,satisfaction,reunion,aboutimage
+    logo,slider1,slider2,slider3,people,handshake,satisfaction,reunion,aboutimage,avtar,avtarr,avtarrr,
     
 }
