@@ -88,7 +88,7 @@ const Register = () => {
     };
 
     return (
-        <div className="flex justify-center items-center h-screen bg-gray-100">
+        <div className="flex justify-center items-center py-20 bg-gray-100">
             <ToastContainer />
             <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
                 <h2 className="text-3xl mb-6 font-bold text-center montserrat">Register</h2>
