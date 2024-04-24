@@ -4,7 +4,7 @@ const Testimonials = () => {
     return (
         <div className="flex justify-center bg-[#001524] py-5">
             <div className="flex flex-col justify-center items-center pb-10">
-                <div className="text-white text-3xl font-medium my-10">Our Trusted Clients</div>
+                <div className="text-white text-3xl font-medium my-10">Our Trusted</div>
                 <div className="flex flex-col md:flex-row max-w-7xl justify-center items-center">
                     <div className="overflow-hidden w-full m-4 flex justify-center bg-white rounded-lg md:w-[33%] px-8">
                         <div className="flex flex-col md:flex-row items-center justify-center">

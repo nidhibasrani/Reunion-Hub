@@ -6,7 +6,7 @@ const WhyUs = () => {
     const data = [
         {
             image: image.people,
-            heading: 'Alumni Comminity',
+            heading: 'Alumni Community',
             description: "Connect with fellow graduates, forge lifelong friendships, and access valuable networking opportunities.",
         },
         {
