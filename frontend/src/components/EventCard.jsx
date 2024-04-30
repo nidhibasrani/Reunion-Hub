@@ -10,6 +10,7 @@ const EventCard = () => {
 
   useEffect(() => {
     fetchEvents();
+    
   }, []);
 
   const fetchEvents = async () => {
